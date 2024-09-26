@@ -12,6 +12,8 @@
 
 #ifdef SW_LOGGER_USE_FMT
 	#include <spdlog/fmt/fmt.h>
+#else
+	#include <format>
 #endif
 
 #ifdef __GNUC__
@@ -98,7 +100,7 @@ namespace SW
 		static void PrepareAndPrint(LogType type, LogLevel level, std::string_view tag, const std::string& message);
 	};
 
-#ifdef SW_LOGGER_ENABLE_ASSERTS
+#ifndef SW_LOGGER_DISABLE_ASSERTS
 	// Asserts that an expression is true. If the expression is false, the application will be halted.
 	// Does the check only if SW_LOGGER_ENABLE_ASSERTS is defined.
 	#define ASSERT(x, ...)                                                                            \

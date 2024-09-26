@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  clang_linux_build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build-configuration: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Update package list
+        run: sudo apt-get update
+
+      - name: Install dependencies
+        run: sudo apt-get install -y cmake ninja-build clang
+
+      - name: Run cmake
+        run: cmake -G 'Ninja' -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -DSW_LOGGER_USE_FMT=ON -B build .
+
+      - name: Build
+        run: cmake --build build --config ${{ matrix.build-configuration }}
+
+  msbuild_windows_build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build-configuration: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run CMake
+        shell: powershell
+        run: cmake -G 'Visual Studio 16 2019' -A x64 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -B build .
+
+      - name: Build
+        shell: powershell
+        run: cmake --build build --config ${{ matrix.build-configuration }}

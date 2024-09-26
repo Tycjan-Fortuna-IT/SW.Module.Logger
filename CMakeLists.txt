@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.16...3.26 FATAL_ERROR)
 
 project(Logger VERSION 0.2.1 LANGUAGES CXX)
 
+if(SW_LOGGER_USE_FMT)
+    add_compile_definitions(SW_LOGGER_USE_FMT)
+endif()
+
 include(ExternalProject)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
