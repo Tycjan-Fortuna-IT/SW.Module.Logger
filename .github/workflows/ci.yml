@@ -29,13 +29,6 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install -y cmake ninja-build clang
 
-      - name: Grant write permissions to /include
-        run: |
-          sudo mkdir -p /include
-          sudo mkdir -p /lib
-          sudo chmod -R 777 /include           # Give the owner read/write and others read only
-          sudo chmod -R 777 /lib               # Give the owner read/write and others read only
-
       - name: Run cmake
         run: cmake -G 'Ninja' -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -DSW_LOGGER_USE_FMT=ON -B build .
 

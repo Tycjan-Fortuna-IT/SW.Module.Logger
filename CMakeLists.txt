@@ -23,9 +23,9 @@ ExternalProject_Add(spdlog
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
     -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-    -DCMAKE_INSTALL_PREFIX=${STAGING_DIR}
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
     -DSPDLOG_BUILD_SHARED=OFF
 )
 
 add_dependencies(${PROJECT_NAME} spdlog)
-target_include_directories(${PROJECT_NAME} PUBLIC ${STAGING_DIR}/include/)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR}/install/include)
