@@ -8,7 +8,7 @@
 
 namespace SW
 {
-	static std::shared_ptr<spdlog::logger> s_EngineLogger;
+	static std::shared_ptr<spdlog::logger> s_SystemLogger;
 	static std::shared_ptr<spdlog::logger> s_AppLogger;
 
 #define ANSI_COLOR_BLACK      "\x1b[30m"
@@ -39,10 +39,10 @@ namespace SW
 		logSinks[0]->set_pattern(spec.ConsoleSinkLoggerPattern);
 		logSinks[1]->set_pattern(spec.FileSinkLoggerPattern);
 
-		s_EngineLogger = std::make_shared<spdlog::logger>(spec.SystemLoggerName, begin(logSinks), end(logSinks));
-		s_EngineLogger->set_level(spdlog::level::trace);
-		s_EngineLogger->flush_on(spdlog::level::trace);
-		spdlog::register_logger(s_EngineLogger);
+		s_SystemLogger = std::make_shared<spdlog::logger>(spec.SystemLoggerName, begin(logSinks), end(logSinks));
+		s_SystemLogger->set_level(spdlog::level::trace);
+		s_SystemLogger->flush_on(spdlog::level::trace);
+		spdlog::register_logger(s_SystemLogger);
 
 		s_AppLogger = std::make_shared<spdlog::logger>(spec.AppLoggerName, begin(logSinks), end(logSinks));
 		s_AppLogger->set_level(spdlog::level::trace);
@@ -52,7 +52,7 @@ namespace SW
 
 	void LogSystem::Shutdown()
 	{
-		s_EngineLogger.reset();
+		s_SystemLogger.reset();
 		s_AppLogger.reset();
 		spdlog::drop_all();
 	}
@@ -66,7 +66,7 @@ namespace SW
 
 	void LogSystem::PrepareAndPrint(LogType type, LogLevel level, std::string_view tag, const std::string& message)
 	{
-		const std::shared_ptr<spdlog::logger>& logger = type == LogType::SYSTEM ? s_EngineLogger : s_AppLogger;
+		const std::shared_ptr<spdlog::logger>& logger = type == LogType::SYSTEM ? s_SystemLogger : s_AppLogger;
 
 		switch (level)
 		{
