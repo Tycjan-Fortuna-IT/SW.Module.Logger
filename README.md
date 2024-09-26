@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	    .AppLoggerName            = "APP",
 	};
 
-    // Initialize the logger. Important! This must be called before any logging is done.
+        // Initialize the logger. Important! This must be called before any logging is done.
 	SW::LogSystem::Initialize(spec);
 
 	SYSTEM_TRACE("This is a trace message {} / {}", 12, "some text");
@@ -39,11 +39,11 @@ int main(int argc, char* argv[])
 	APP_ERROR("This is an error message {} / {}", 12, "some text");
 	APP_FATAL("This is a fatal message {} / {}", 12, "some text");
 
-    ASSERT(false, "This is an assertion failure message {} / {}", 12, "some text");
+        ASSERT(false, "This is an assertion failure message {} / {}", 12, "some text");
 
-    VERIFY(false, "This is a verification failure message {} / {}", 12, "some text");
+        VERIFY(false, "This is a verification failure message {} / {}", 12, "some text");
 
-    // Shutdown the logger. Important! This must be called before the application exits.
+        // Shutdown the logger. Important! This must be called before the application exits.
 	SW::LogSystem::Shutdown();
 
 	return 0;
