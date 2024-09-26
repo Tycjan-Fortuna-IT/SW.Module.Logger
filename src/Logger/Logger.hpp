@@ -8,4 +8,5 @@
  */
 #pragma once
 
+#include <Logger/LogCustomFormatters.hpp>
 #include <Logger/LogSystem.hpp>
