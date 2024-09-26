@@ -29,6 +29,15 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install -y cmake ninja-build clang
 
+      - name: Grant write permissions to /include
+        run: |
+          sudo mkdir -p /include
+          sudo mkdir -p /lib
+          sudo chown -R $USER:$USER /include   # Change ownership to the runner user
+          sudo chmod -R 755 /include           # Give the owner read/write and others read only
+          sudo chown -R $USER:$USER /lib       # Change ownership to the runner user
+          sudo chmod -R 755 /lib               # Give the owner read/write and others read only
+
       - name: Run cmake
         run: cmake -G 'Ninja' -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -DSW_LOGGER_USE_FMT=ON -B build .
 
@@ -50,7 +59,7 @@ jobs:
 
       - name: Run CMake
         shell: powershell
-        run: cmake -G 'Visual Studio 16 2019' -A x64 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -B build .
+        run: cmake -G 'Visual Studio 17 2022' -A x64 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=${{ matrix.build-configuration }} -B build .
 
       - name: Build
         shell: powershell
