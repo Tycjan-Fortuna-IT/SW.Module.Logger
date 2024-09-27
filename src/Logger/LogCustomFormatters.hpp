@@ -1,3 +1,11 @@
+/**
+ * @file LogCustomFormatters.hpp
+ * @author SW
+ * @version 0.2.1
+ * @date 2024-05-10
+ *
+ * @copyright Copyright (c) 2024 SW
+ */
 #pragma once
 
 #ifdef SW_LOGGER_USE_FMT
@@ -10,7 +18,53 @@
 	#include <format>
 #endif
 
-#include <filesystem>
+/**
+ * @brief This macro is used to define a new formatter for a custom type.
+ *
+ * @param T The type for which the formatter is defined.
+ *
+ * The formatter is defined in the formatns namespace. Either fmt or std. Based on the USE_FMT_FOR_LOGGING macro.
+ *
+ * Must be used in the global namespace. And closed with the END_CAST_FORMATTER macro.
+ *
+ * Example usage:
+ *
+ *     BEGIN_CAST_FORMATTER(std::filesystem::path);
+ *     FORMATTER_CAST(std::string, value.string());
+ *     END_CAST_FORMATTER;
+ *
+ *     The above code will define a formatter for std::filesystem::path type.
+ *
+ *     Available variables:
+ *       - value: The value of the type to be formatted.
+ *       - ctx: The format context.
+ */
+#define BEGIN_CAST_FORMATTER(T)                                                        \
+	namespace formatns                                                                 \
+	{                                                                                  \
+		template <>                                                                    \
+		struct formatter<T> : formatter<std::string>                                   \
+		{                                                                              \
+			template <typename format_context>                                         \
+			format_context::iterator format(const T& value, format_context& ctx) const \
+			{
+
+#define END_CAST_FORMATTER \
+	}                      \
+	}                      \
+	;                      \
+	}
+
+/**
+ * @brief This macro is used to format a value using the custom formatter and add it to the output buffer.
+ *
+ * @param T The type of the value to be formatted.
+ * @param value The value to be formatted.
+ *
+ * Example usage:
+ *      FORMATTER_CAST(std::string, value.string());
+ */
+#define FORMATTER_CAST(T, value) return formatns::formatter<T>().format(value, ctx)
 
 /**
  * @brief This macro is used to define a new formatter for a custom type.
@@ -19,16 +73,26 @@
  *
  * The formatter is defined in the formatns namespace. Either fmt or std. Based on the USE_FMT_FOR_LOGGING macro.
  *
- * Must be used in the global namespace. And closed with the END_NEW_FORMATTER macro.
+ * Must be used in the global namespace. And closed with the END_ADV_FORMATTER macro.
  *
  * Example usage:
  *
- *     BEGIN_NEW_FORMATTER(std::filesystem::path);
+ *     struct Vec3
+ *     {
+ *         float x, y, z;
+ *     };
  *
- *     std::string path = value.string();
- *     std::copy(path.begin(), path.end(), it);
+ *     BEGIN_ADV_FORMATTER(Vec3);
  *
- *     END_NEW_FORMATTER;
+ *     *it++ = '[';
+ *     it    = FORMATTER_FORMAT(float, value.x);
+ *     *it++ = ',';
+ *     it    = FORMATTER_FORMAT(float, value.y);
+ *     *it++ = ',';
+ *     it    = FORMATTER_FORMAT(float, value.z);
+ *     *it++ = ']';
+ *
+ *     END_ADV_FORMATTER;
  *
  *     The above code will define a formatter for std::filesystem::path type.
  *
@@ -37,7 +101,7 @@
  *       - it: The iterator to the output buffer.
  *       - ctx: The format context.
  */
-#define BEGIN_NEW_FORMATTER(T)                                                                            \
+#define BEGIN_ADV_FORMATTER(T)                                                                            \
 	namespace formatns                                                                                    \
 	{                                                                                                     \
 		template <>                                                                                       \
@@ -54,7 +118,7 @@
 			{                                                                                             \
 				formatns::format_context::iterator it = ctx.out();
 
-#define END_NEW_FORMATTER \
+#define END_ADV_FORMATTER \
 	return it;            \
 	}                     \
 	}                     \
@@ -68,22 +132,6 @@
  * @param value The value to be formatted.
  *
  * Example usage:
- *
- *      struct Vec3
- *      {
- *          float x, y, z;
- *      };
- *
- *      BEGIN_NEW_FORMATTER(Vec3);
- *
- *      *it++ = '[';
- *      it    = FORMATTER_FORMAT(float, value.x);
- *      *it++ = ',';
- *      it    = FORMATTER_FORMAT(float, value.y);
- *      *it++ = ',';
- *      it    = FORMATTER_FORMAT(float, value.z);
- *      *it++ = ']';
- *
- *      END_NEW_FORMATTER;
+ *      it    = FORMATTER_FORMAT(float, value);
  */
 #define FORMATTER_FORMAT(T, value) formatns::formatter<T, char>().format(value, ctx)

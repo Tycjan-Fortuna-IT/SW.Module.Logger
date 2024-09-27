@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.16...3.26 FATAL_ERROR)
 
 project(Logger VERSION 0.2.1 LANGUAGES CXX)
 
+if(WIN32)
+    add_compile_definitions(SW_PLATFORM_WINDOWS)
+elseif(UNIX)
+    add_compile_definitions(SW_PLATFORM_LINUX)
+endif()
+
 if(SW_LOGGER_USE_FMT)
     add_compile_definitions(SW_LOGGER_USE_FMT)
 endif()
@@ -29,3 +35,11 @@ ExternalProject_Add(spdlog
 
 add_dependencies(${PROJECT_NAME} spdlog)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR}/install/include)
+
+if(SW_LOGGER_COMPILE_TESTS)
+    add_executable(compile_test tests/test.cpp)
+    target_link_libraries(compile_test PRIVATE Logger)
+
+    enable_testing()
+    add_test(NAME compile_test COMMAND $<TARGET_FILE:compile_test>)
+endif()

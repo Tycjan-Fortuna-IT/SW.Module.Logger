@@ -48,12 +48,12 @@ Disable the use of `APP_TRACE`, `APP_INFO`, `APP_DEBUG`, `APP_WARN`, `APP_ERROR`
 ```cpp
 #include <Logger/Logger.hpp>
 
-BEGIN_NEW_FORMATTER(std::filesystem::path);
+BEGIN_ADV_FORMATTER(std::filesystem::path);
 
 std::string path = value.string();
 std::copy(path.begin(), path.end(), it);
 
-END_NEW_FORMATTER;
+END_ADV_FORMATTER;
 
 
 int main(int argc, char* argv[])
@@ -99,24 +99,34 @@ int main(int argc, char* argv[])
 
 ## Custom Formatters
 
-For any type that you want to log, you can define a custom formatter by specializing the `formatter` class. This can be achieved by `BEGIN_NEW_FORMATTER`, `END_FORMATTER` and `FORMATTER_FORMAT` macros.
+For any type that you want to log, you can define a custom formatter by specializing the `formatter` class.
 
 Example usage:
 
-1. Basic
+1. Cast (for easily convertible types)
 
 ```cpp
-BEGIN_NEW_FORMATTER(std::filesystem::path);
+BEGIN_CAST_FORMATTER(std::filesystem::path);
+
+FORMATTER_CAST(std::string, value.string());
+
+END_CAST_FORMATTER;
+```
+
+2. Basic
+
+```cpp
+BEGIN_ADV_FORMATTER(std::filesystem::path);
 
 std::string path = value.string();
 std::copy(path.begin(), path.end(), it);
 
-END_NEW_FORMATTER;
+END_ADV_FORMATTER;
 ```
 
 The above code will allow you to log `std::filesystem::path` objects.
 
-2. Advanced
+3. Advanced
 
 ```cpp
 struct Vec3
@@ -124,7 +134,7 @@ struct Vec3
 	float x, y, z;
 };
 
-BEGIN_NEW_FORMATTER(Vec3);
+BEGIN_ADV_FORMATTER(Vec3);
 
 *it++ = '[';
 it    = FORMATTER_FORMAT(float, value.x);
@@ -134,7 +144,7 @@ it    = FORMATTER_FORMAT(float, value.y);
 it    = FORMATTER_FORMAT(float, value.z);
 *it++ = ']';
 
-END_NEW_FORMATTER;
+END_ADV_FORMATTER;
 ```
 
 The above code will allow you to log `Vec3` objects in the following format: `[x, y, z]`.
