@@ -11,8 +11,12 @@
 #include <string>
 
 #ifdef SW_LOGGER_USE_FMT
+	#define formatns fmt
+
 	#include <spdlog/fmt/fmt.h>
 #else
+	#define formatns std
+
 	#include <format>
 #endif
 
@@ -83,11 +87,8 @@ namespace SW
 		static void PrintMessage(LogType type, LogLevel level, std::string_view tag, std::string_view format = "",
 		                         Args&&... args)
 		{
-#ifdef SW_LOGGER_USE_FMT
-			std::string message = fmt::vformat(format, fmt::make_format_args(args...));
-#else
-			std::string message = std::vformat(format, std::make_format_args(std::forward<Args>(args)...));
-#endif
+			std::string message = formatns::vformat(format, formatns::make_format_args(args...));
+
 			PrepareAndPrint(type, level, tag, message);
 		}
 
