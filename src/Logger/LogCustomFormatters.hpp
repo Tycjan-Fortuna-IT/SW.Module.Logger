@@ -39,14 +39,13 @@
  *       - value: The value of the type to be formatted.
  *       - ctx: The format context.
  */
-#define BEGIN_CAST_FORMATTER(T)                                                        \
-	namespace formatns                                                                 \
-	{                                                                                  \
-		template <>                                                                    \
-		struct formatter<T> : formatter<std::string>                                   \
-		{                                                                              \
-			template <typename format_context>                                         \
-			format_context::iterator format(const T& value, format_context& ctx) const \
+#define BEGIN_CAST_FORMATTER(T)                                                                            \
+	namespace formatns                                                                                     \
+	{                                                                                                      \
+		template <>                                                                                        \
+		struct formatter<T> : formatter<std::string>                                                       \
+		{                                                                                                  \
+			formatns::format_context::iterator format(const T& value, formatns::format_context& ctx) const \
 			{
 
 #define END_CAST_FORMATTER \
