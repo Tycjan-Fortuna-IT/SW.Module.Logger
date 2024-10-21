@@ -20,4 +20,18 @@ project "Logger"
         "spdlog"
     }
 
+    filter "configurations:Debug"
+        runtime "Debug"
+        symbols "On"
+
+    filter "configurations:Release"
+        runtime "Release"
+        optimize "On"
+        symbols "On"
+
+    filter "configurations:Dist"
+        runtime "Release"
+        optimize "On"
+        symbols "Off"
+
     include "vendor/spdlog"
