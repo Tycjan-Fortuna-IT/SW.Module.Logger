@@ -2,12 +2,15 @@
  * @file LogSystem.hpp
  * @author SW
  * @version 0.2.1
- * @date 2024-05-10
+ * @date 2024-21-10
  *
  * @copyright Copyright (c) 2024 SW
  */
 #pragma once
 
+#include <spdlog/spdlog.h>
+
+#include <memory>
 #include <string>
 
 #ifdef SW_LOGGER_USE_FMT
@@ -78,6 +81,12 @@ namespace SW
 	public:
 		static void Initialize(const LogSystemSpecification& spec = {});
 		static void Shutdown();
+
+		// Adds a sink to the system logger.
+		static void AddSystemSink(const spdlog::sink_ptr& sink);
+
+		// Adds a sink to the app logger.
+		static void AddAppSink(const spdlog::sink_ptr& sink);
 
 		// Prints using spdlog logger logs to specified sinks.
 		// This method should not be used directly, but rather through the FATAL, ERROR, WARN, INFO, DEBUG, and TRACE

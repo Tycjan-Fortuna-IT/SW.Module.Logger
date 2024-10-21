@@ -1,10 +1,7 @@
 #include "LogSystem.hpp"
 
-#include <memory>
-
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
 
 namespace SW
 {
@@ -55,6 +52,16 @@ namespace SW
 		s_SystemLogger.reset();
 		s_AppLogger.reset();
 		spdlog::drop_all();
+	}
+
+	void LogSystem::AddSystemSink(const spdlog::sink_ptr& sink)
+	{
+		s_SystemLogger->sinks().push_back(sink);
+	}
+
+	void LogSystem::AddAppSink(const spdlog::sink_ptr& sink)
+	{
+		s_AppLogger->sinks().push_back(sink);
 	}
 
 	void LogSystem::ReportAssertionFailure(const char* expression, const char* message, const char* file, i16 line)
