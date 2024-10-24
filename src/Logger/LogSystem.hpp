@@ -112,7 +112,7 @@ namespace SW::Logger
 
 #ifndef SW_LOGGER_DISABLE_ASSERTS
 	// Asserts that an expression is true. If the expression is false, the application will be halted.
-	// Does the check only if SW_LOGGER_ENABLE_ASSERTS is defined.
+	// Does the check only if SW_LOGGER_DISABLE_ASSERTS is not defined.
 	#define ASSERT(x, ...)                                                                    \
 		{                                                                                     \
 			if (!(x))                                                                         \
@@ -125,7 +125,7 @@ namespace SW::Logger
 		}
 #else
 	#define ASSERT(x, ...)
-#endif // SW_LOGGER_ENABLE_ASSERTS
+#endif // SW_LOGGER_DISABLE_ASSERTS
 
 // Verifies that an expression is true. If the expression is false, the application will be halted.
 // Always enabled.

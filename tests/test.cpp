@@ -25,7 +25,7 @@ END_ADV_FORMATTER;
 
 int main(int argc, char* argv[])
 {
-	const SW::LogSystemSpecification spec = {
+	const SW::Logger::LogSystemSpecification spec = {
 	    .LogFileName              = "logs/SW.log",
 	    .ConsoleSinkLoggerPattern = "%^[%T] [%n] [%l]: %v%$",
 	    .FileSinkLoggerPattern    = "[%T] [%l] [%n] [%l]: %v",
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	    .AppLoggerName            = "APP",
 	};
 
-	SW::LogSystem::Initialize(spec);
+	SW::Logger::LogSystem::Initialize(spec);
 
 	std::filesystem::path path = "C:/Users/username/Documents";
 	SYSTEM_TRACE("This is a trace message {} / {}", 12, path);
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	APP_ERROR("This is an error message {} / {}", 12, "some text");
 	APP_FATAL("This is a fatal message {} / {}", 12, "some text");
 
-	SW::LogSystem::Shutdown();
+	SW::Logger::LogSystem::Shutdown();
 
 	return 0;
 }
