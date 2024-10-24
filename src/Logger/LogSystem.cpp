@@ -3,7 +3,7 @@
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace SW
+namespace SW::Logger
 {
 	static std::shared_ptr<spdlog::logger> s_SystemLogger;
 	static std::shared_ptr<spdlog::logger> s_AppLogger;
@@ -98,4 +98,4 @@ namespace SW
 		}
 	}
 
-} // namespace SW
+} // namespace SW::Logger

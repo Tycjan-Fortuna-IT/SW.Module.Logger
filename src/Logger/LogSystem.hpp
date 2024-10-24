@@ -38,7 +38,7 @@
 	#endif
 #endif
 
-namespace SW
+namespace SW::Logger
 {
 	using u8  = unsigned char;
 	using i16 = signed short;
@@ -113,15 +113,15 @@ namespace SW
 #ifndef SW_LOGGER_DISABLE_ASSERTS
 	// Asserts that an expression is true. If the expression is false, the application will be halted.
 	// Does the check only if SW_LOGGER_ENABLE_ASSERTS is defined.
-	#define ASSERT(x, ...)                                                                            \
-		{                                                                                             \
-			if (!(x))                                                                                 \
-			{                                                                                         \
-				::SW::LogSystem::PrintMessage(::SW::LogType::SYSTEM, ::SW::LogLevel::LOG_LEVEL_FATAL, \
-				                              "Assertion failed: " #x                                 \
-				                              " info --> " VA_OPTIONAL_EXPANSION(__VA_ARGS__));       \
-				DEBUG_BREAK();                                                                        \
-			}                                                                                         \
+	#define ASSERT(x, ...)                                                                    \
+		{                                                                                     \
+			if (!(x))                                                                         \
+			{                                                                                 \
+				::SW::Logger::LogSystem::PrintMessage(                                        \
+				    ::SW::Logger::LogType::SYSTEM, ::SW::Logger::LogLevel::LOG_LEVEL_FATAL,   \
+				    "Assertion failed: " #x " info --> " VA_OPTIONAL_EXPANSION(__VA_ARGS__)); \
+				DEBUG_BREAK();                                                                \
+			}                                                                                 \
 		}
 #else
 	#define ASSERT(x, ...)
@@ -133,7 +133,7 @@ namespace SW
 	{                                                                                                               \
 		if (!(x))                                                                                                   \
 		{                                                                                                           \
-			::SW::LogSystem::PrintMessage(::SW::LogType::SYSTEM, ::SW::LogLevel::LOG_LEVEL_FATAL,                   \
+			::SW::LogSystem::PrintMessage(::SW::Logger::LogType::SYSTEM, ::SW::Logger::LogLevel::LOG_LEVEL_FATAL,   \
 			                              "Assertion failed: " #x " info --> " VA_OPTIONAL_EXPANSION(__VA_ARGS__)); \
 			DEBUG_BREAK();                                                                                          \
 		}                                                                                                           \
@@ -141,9 +141,9 @@ namespace SW
 
 // Logs a message.
 // This macro should not be used directly, but rather through the FATAL, ERROR, WARN, INFO, DEBUG, and TRACE macros.
-#define SW_LOG(type, level, msg, ...)                                             \
-	::SW::LogSystem::PrintMessage(::SW::LogType::type, ::SW::LogLevel::level, "", \
-	                              msg VA_OPTIONAL_EXPANSION(__VA_ARGS__))
+#define SW_LOG(type, level, msg, ...)                                                                     \
+	::SW::Logger::LogSystem::PrintMessage(::SW::Logger::LogType::type, ::SW::Logger::LogLevel::level, "", \
+	                                      msg VA_OPTIONAL_EXPANSION(__VA_ARGS__))
 
 #ifndef SW_LOGGER_DISABLE_SYSTEM_LOGS
 	// Logs a trace message. System use only.
@@ -224,4 +224,4 @@ namespace SW
 	#define APP_ERROR(msg, ...)
 	#define APP_FATAL(msg, ...)
 #endif
-} // namespace SW
+} // namespace SW::Logger
