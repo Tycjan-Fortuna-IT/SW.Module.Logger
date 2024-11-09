@@ -6,6 +6,10 @@ project "Logger"
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
+    defines {
+        "SPDLOG_COMPILED_LIB"
+    }
+
     files {
         "src/**.hpp",
         "src/**.cpp",
@@ -34,4 +38,10 @@ project "Logger"
         optimize "On"
         symbols "Off"
 
-    include "vendor/spdlog"
+    filter "system:windows"
+        defines { "SW_PLATFORM_WINDOWS" }
+
+    filter "system:linux"
+        defines { "SW_PLATFORM_LINUX" }
+
+        include "vendor/spdlog"

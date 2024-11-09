@@ -1,7 +1,10 @@
 return function(basePath)
     return {
         Name = "SW Logger Module",
-        LibsToLink = { "Logger" },
+        Defines = {
+            "SPDLOG_COMPILED_LIB"
+        },
+        LibsToLink = { "Logger", "spdlog" },
         IncludeDirs = {
             basePath .. "/src",
             basePath .. "/vendor/spdlog/include"

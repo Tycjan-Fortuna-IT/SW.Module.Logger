@@ -129,14 +129,15 @@ namespace SW::Logger
 
 // Verifies that an expression is true. If the expression is false, the application will be halted.
 // Always enabled.
-#define VERIFY(x, ...)                                                                                              \
-	{                                                                                                               \
-		if (!(x))                                                                                                   \
-		{                                                                                                           \
-			::SW::LogSystem::PrintMessage(::SW::Logger::LogType::SYSTEM, ::SW::Logger::LogLevel::LOG_LEVEL_FATAL,   \
-			                              "Assertion failed: " #x " info --> " VA_OPTIONAL_EXPANSION(__VA_ARGS__)); \
-			DEBUG_BREAK();                                                                                          \
-		}                                                                                                           \
+#define VERIFY(x, ...)                                                                    \
+	{                                                                                     \
+		if (!(x))                                                                         \
+		{                                                                                 \
+			::SW::Logger::LogSystem::PrintMessage(                                        \
+			    ::SW::Logger::LogType::SYSTEM, ::SW::Logger::LogLevel::LOG_LEVEL_FATAL,   \
+			    "Assertion failed: " #x " info --> " VA_OPTIONAL_EXPANSION(__VA_ARGS__)); \
+			DEBUG_BREAK();                                                                \
+		}                                                                                 \
 	}
 
 // Logs a message.

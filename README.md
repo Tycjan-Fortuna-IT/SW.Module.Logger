@@ -1,11 +1,20 @@
 # SW Logger Module
 
-The SW Logger module is a simple logging module that can be used to log messages to the console or to a file. The module is designed to be simple to use and easy to integrate into any project.
+The SW Logger module is a lightweight, flexible logging utility designed for seamless integration into any project. It provides easy-to-use features for logging messages, errors, warnings, and other information either to the console or to a file. The SW Logger module is structured for simplicity and high configurability, allowing developers to tailor logging behaviors and formats to their specific needs.
 
 ## Tested Platforms
+Used C++ dialect version: `20`
+- [x] Windows (`MSVC 2022`)
+- [x] Linux (`clang 18.x`)
 
-- [x] Windows (`MSVC`)
-- [x] Linux (`clang`)
+## Dependencies (SW modules)
+None
+
+## Installation (Premake5 - FancyBuildSystem)
+Add inside your main dependencies.lua following line:
+```lua
+FBS.ImportModule("Engine/modules/OpenGL");
+```
 
 ## Installation (CMake)
 
