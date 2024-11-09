@@ -13,8 +13,9 @@ None
 ## Installation (Premake5 - FancyBuildSystem)
 Add inside your main dependencies.lua following line:
 ```lua
-FBS.ImportModule("Engine/modules/OpenGL");
+FBS.ImportModule("Engine/modules/Logger");
 ```
+Replacing with correct path to the module.
 
 ## Installation (CMake)
 
