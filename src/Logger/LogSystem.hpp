@@ -146,6 +146,9 @@ namespace SW::Logger
 	::SW::Logger::LogSystem::PrintMessage(::SW::Logger::LogType::type, ::SW::Logger::LogLevel::level, "", \
 	                                      msg VA_OPTIONAL_EXPANSION(__VA_ARGS__))
 
+// Formats a message. Returns a formatted string.
+#define FORMAT(str, ...) formatns::vformat(str, formatns::make_format_args(__VA_ARGS__))
+
 #ifndef SW_LOGGER_DISABLE_SYSTEM_LOGS
 	// Logs a trace message. System use only.
 	// This macro should be used for verbose debugging purposes.
