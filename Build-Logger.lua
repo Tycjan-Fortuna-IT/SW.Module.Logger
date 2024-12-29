@@ -17,7 +17,12 @@ project "Logger"
 
     includedirs {
         "src",
-        "vendor/spdlog/include",
+    }
+
+    externalwarnings "Off"
+
+    externalincludedirs {
+        "vendor/spdlog/include"
     }
 
     links {

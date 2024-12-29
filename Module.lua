@@ -7,6 +7,8 @@ return function(basePath)
         LibsToLink = { "Logger", "spdlog" },
         IncludeDirs = {
             basePath .. "/src",
+        },
+        ExternalIncludeDirs = {
             basePath .. "/vendor/spdlog/include"
         },
     }
