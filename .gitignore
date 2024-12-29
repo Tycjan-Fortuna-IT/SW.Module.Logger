@@ -2,3 +2,5 @@ build
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.ninja
+Makefile

@@ -44,4 +44,4 @@ project "Logger"
     filter "system:linux"
         defines { "SW_PLATFORM_LINUX" }
 
-        include "vendor/spdlog"
+    include "vendor/spdlog"
