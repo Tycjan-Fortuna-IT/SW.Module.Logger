@@ -75,6 +75,12 @@ namespace SW::Logger
 	{
 		const std::shared_ptr<spdlog::logger>& logger = type == LogType::SYSTEM ? s_SystemLogger : s_AppLogger;
 
+		PrepareAndPrint(logger, type, level, tag, message);
+	}
+
+	void LogSystem::PrepareAndPrint(const std::shared_ptr<spdlog::logger>& logger, LogType type, LogLevel level,
+	                                std::string_view tag, const std::string& message)
+	{
 		switch (level)
 		{
 		case LOG_LEVEL_TRACE:

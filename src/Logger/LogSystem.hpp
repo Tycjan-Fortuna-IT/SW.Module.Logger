@@ -101,16 +101,32 @@ namespace SW::Logger
 			PrepareAndPrint(type, level, tag, message);
 		}
 
+		template <typename... Args>
+		static void PrintMessage(const std::shared_ptr<spdlog::logger>& logger, LogType type, LogLevel level,
+		                         std::string_view tag, std::string_view format = "", Args&&... args)
+		{
+			std::string message = formatns::vformat(format, formatns::make_format_args(args...));
+
+			PrepareAndPrint(logger, type, level, tag, message);
+		}
+
 		// Reports an assertion failure.
 		// This method should not be used directly, but rather through the ASSERT macro.
 		static void ReportAssertionFailure(const char* expression, const char* message, const char* file, i16 line);
 
 		static const std::shared_ptr<spdlog::logger>& GetSystemLogger() { return s_SystemLogger; }
+		static std::shared_ptr<spdlog::logger>& GetSystemLoggerMut() { return s_SystemLogger; }
+
 		static const std::shared_ptr<spdlog::logger>& GetAppLogger() { return s_AppLogger; }
+		static std::shared_ptr<spdlog::logger>& GetAppLoggerMut() { return s_AppLogger; }
 
 	private:
 		// Prepares and sends the message to the logger.
 		static void PrepareAndPrint(LogType type, LogLevel level, std::string_view tag, const std::string& message);
+
+		// Prepares and sends the message to the specified custom logger.
+		static void PrepareAndPrint(const std::shared_ptr<spdlog::logger>& logger, LogType type, LogLevel level,
+		                            std::string_view tag, const std::string& message);
 
 	private:
 		static std::shared_ptr<spdlog::logger> s_SystemLogger;
