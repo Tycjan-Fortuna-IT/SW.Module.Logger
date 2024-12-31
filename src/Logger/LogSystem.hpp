@@ -170,7 +170,8 @@ namespace SW::Logger
 	                                      msg VA_OPTIONAL_EXPANSION(__VA_ARGS__))
 
 // Formats a message. Returns a formatted string.
-#define FORMAT(str, ...) formatns::vformat(str, formatns::make_format_args(__VA_ARGS__))
+#define FORMAT(str, ...)       formatns::vformat(str, formatns::make_format_args(__VA_ARGS__))
+#define FORMAT_C_STR(str, ...) FORMAT(str, __VA_ARGS__).c_str()
 
 #ifndef SW_LOGGER_DISABLE_SYSTEM_LOGS
 	// Logs a trace message. System use only.
