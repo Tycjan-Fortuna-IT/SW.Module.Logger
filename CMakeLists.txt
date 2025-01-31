@@ -27,14 +27,26 @@ ExternalProject_Add(spdlog
     CMAKE_ARGS
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/spdlog
     -DSPDLOG_BUILD_SHARED=OFF
 )
 
 add_dependencies(${PROJECT_NAME} spdlog)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR}/install/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR}/install/spdlog/include)
+target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_COMPILED_LIB)
+
+find_library(SPDLOG_LIBRARY
+    NAMES spdlog spdlogd # Look for both Release and Debug versions
+    PATHS ${CMAKE_BINARY_DIR}/install/spdlog/lib
+    NO_DEFAULT_PATH
+)
+
+if(NOT SPDLOG_LIBRARY)
+    message(FATAL_ERROR "spdlog library not found!")
+endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${SPDLOG_LIBRARY})
 
 if(SW_LOGGER_COMPILE_TESTS)
     add_executable(compile_test tests/test.cpp)
