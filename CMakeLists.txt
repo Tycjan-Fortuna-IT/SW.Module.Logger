@@ -21,6 +21,14 @@ file(GLOB_RECURSE SOURCES "src/Logger/*.cpp")
 
 add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
 
+set(SPDLOG_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/spdlog/src/spdlog-build")
+
+if(WIN32)
+    set(SPDLOG_LIB_DIR "$<IF:$<CONFIG:Debug>,${SPDLOG_LIB_DIR}/spdlogd.lib,${SPDLOG_LIB_DIR}/spdlog.lib>")
+else()
+    set(SPDLOG_LIB_DIR "$<IF:$<CONFIG:Debug>,${SPDLOG_LIB_DIR}/libspdlogd.a,${SPDLOG_LIB_DIR}/libspdlog.a>")
+endif()
+
 ExternalProject_Add(spdlog
     PREFIX spdlog
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/spdlog
@@ -28,25 +36,17 @@ ExternalProject_Add(spdlog
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/spdlog
     -DSPDLOG_BUILD_SHARED=OFF
+    BUILD_BYPRODUCTS ${SPDLOG_LIB_DIR}
+    INSTALL_COMMAND ""
 )
 
 add_dependencies(${PROJECT_NAME} spdlog)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR}/install/spdlog/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/vendor/spdlog/include)
 target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_COMPILED_LIB)
 
-find_library(SPDLOG_LIBRARY
-    NAMES spdlog spdlogd # Look for both Release and Debug versions
-    PATHS ${CMAKE_BINARY_DIR}/install/spdlog/lib
-    NO_DEFAULT_PATH
-)
-
-if(NOT SPDLOG_LIBRARY)
-    message(FATAL_ERROR "spdlog library not found!")
-endif()
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${SPDLOG_LIBRARY})
+# Link against the deduced SPDLOG_LIB_DIR
+target_link_libraries(${PROJECT_NAME} PUBLIC ${SPDLOG_LIB_DIR})
 
 if(SW_LOGGER_COMPILE_TESTS)
     add_executable(compile_test tests/test.cpp)
