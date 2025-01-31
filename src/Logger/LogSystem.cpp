@@ -36,12 +36,13 @@ namespace SW::Logger
 		logSinks[0]->set_pattern(spec.ConsoleSinkLoggerPattern);
 		logSinks[1]->set_pattern(spec.FileSinkLoggerPattern);
 
-		s_SystemLogger = std::make_shared<spdlog::logger>(spec.SystemLoggerName, begin(logSinks), end(logSinks));
+		s_SystemLogger =
+		    std::make_shared<spdlog::logger>(spec.SystemLoggerName, std::begin(logSinks), std::end(logSinks));
 		s_SystemLogger->set_level(spdlog::level::trace);
 		s_SystemLogger->flush_on(spdlog::level::trace);
 		spdlog::register_logger(s_SystemLogger);
 
-		s_AppLogger = std::make_shared<spdlog::logger>(spec.AppLoggerName, begin(logSinks), end(logSinks));
+		s_AppLogger = std::make_shared<spdlog::logger>(spec.AppLoggerName, std::begin(logSinks), std::end(logSinks));
 		s_AppLogger->set_level(spdlog::level::trace);
 		s_AppLogger->flush_on(spdlog::level::trace);
 		spdlog::register_logger(s_AppLogger);

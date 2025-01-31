@@ -120,6 +120,9 @@ namespace SW::Logger
 		static const std::shared_ptr<spdlog::logger>& GetAppLogger() { return s_AppLogger; }
 		static std::shared_ptr<spdlog::logger>& GetAppLoggerMut() { return s_AppLogger; }
 
+		static void SetSystemLogger(const std::shared_ptr<spdlog::logger>& logger) { s_SystemLogger = logger; }
+		static void SetAppLogger(const std::shared_ptr<spdlog::logger>& logger) { s_AppLogger = logger; }
+
 	private:
 		// Prepares and sends the message to the logger.
 		static void PrepareAndPrint(LogType type, LogLevel level, std::string_view tag, const std::string& message);
