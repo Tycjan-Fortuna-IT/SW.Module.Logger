@@ -23,6 +23,10 @@ add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
 
 set(SPDLOG_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/spdlog/src/spdlog-build")
 
+if(MSVC)
+    set(SPDLOG_LIB_DIR "${SPDLOG_LIB_DIR}/$<CONFIG>") # Append Debug or Release for MSVC
+endif()
+
 if(WIN32)
     set(SPDLOG_LIB_DIR "$<IF:$<CONFIG:Debug>,${SPDLOG_LIB_DIR}/spdlogd.lib,${SPDLOG_LIB_DIR}/spdlog.lib>")
 else()
