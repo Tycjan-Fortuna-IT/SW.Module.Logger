@@ -14,10 +14,6 @@ if(MSVC)
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src FILES ${SOURCES})
 endif()
 
-add_subdirectory(vendor/quill)
-target_link_libraries(${PROJECT_NAME} PUBLIC quill::quill)
-
-
 include(ExternalProject)
 
 ExternalProject_Add(spdlog
