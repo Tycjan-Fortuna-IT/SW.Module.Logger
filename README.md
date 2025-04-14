@@ -1,21 +1,22 @@
-# SW Logger Module
+# SW.Module.Logger
 
-The SW Logger module is a lightweight, flexible logging utility designed for seamless integration into any project. It provides easy-to-use features for logging messages, errors, warnings, and other information either to the console or to a file. The SW Logger module is structured for simplicity and high configurability, allowing developers to tailor logging behaviors and formats to their specific needs.
+The SW.Module.Logger is a lightweight, flexible logging utility designed for seamless integration into any project. It provides easy-to-use features for logging messages, errors, warnings, and other information either to the console or to a file. The SW.Module.Logger is structured for simplicity and high configurability, allowing developers to tailor logging behaviors and formats to their specific needs.
 
 ## Tested Platforms
-Used C++ dialect version: `20`
+
+Used C++ dialect version: `20` (or higher, the std::format library is required unless you use custom formatters from fmt, see `SW_LOGGER_USE_FMT` in the docs).
+
 - [x] Windows (`MSVC 2022`)
 - [x] Linux (`clang 18.x`)
 
 ## Dependencies (SW modules)
-None
 
-## Installation (Premake5 - FancyBuildSystem)
-Add inside your main dependencies.lua following line:
-```lua
-FBS.ImportModule("Engine/modules/Logger");
-```
-Replacing with correct path to the module.
+| Module           | Link                                                  | Version |
+| ---------------- | ----------------------------------------------------- | ------- |
+| SW.Module.Common | https://github.com/Tycjan-Fortuna-IT/SW.Module.Common | master  |
+
+Placed in the same directory as the SW.Module.Logger module.
+It is recommended to keep all modules in the same directory e.g. `Engine/modules/`.
 
 ## Installation (CMake)
 
@@ -35,23 +36,17 @@ target_link_libraries(${PROJECT_NAME} Logger)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/Engine/Modules/Logger/src)
 ```
 
-## Additional Defines
+## Installation (Premake5 - FancyBuildSystem)
 
-- #### `SW_LOGGER_USE_FMT`
+Add inside your main dependencies.lua following line:
 
-Use the `fmt` library for formatting log messages. If this is not defined, `#include <format>` will be used.
+```lua
+FBS.ImportModule("Engine/modules/Logger");
+```
 
-- #### `SW_LOGGER_DISABLE_ASSERTS`
+Replacing with correct path to the module.
 
-Disable the use of `ASSERT`, removes them at compile time.
-
-- #### `SW_LOGGER_DISABLE_SYSTEM_LOGS`
-
-Disable the use of `SYSTEM_TRACE`, `SYSTEM_INFO`, `SYSTEM_DEBUG`, `SYSTEM_WARN`, `SYSTEM_ERROR`, `SYSTEM_FATAL`. Removes them at compile time.
-
-- #### `SW_LOGGER_DISABLE_APP_LOGS`
-
-Disable the use of `APP_TRACE`, `APP_INFO`, `APP_DEBUG`, `APP_WARN`, `APP_ERROR`, `APP_FATAL`. Removes them at compile time.
+Otherwise if not using FBS, just follow the standard installation process of libraries in Premake5.
 
 ## Example usage
 
@@ -69,32 +64,32 @@ END_ADV_FORMATTER;
 int main(int argc, char* argv[])
 {
 	const SW::LogSystemSpecification spec = {
-	    .LogFileName              = "logs/SW.log",
+	    .LogFilePath              = "logs/SW.log",
 	    .ConsoleSinkLoggerPattern = "%^[%T] [%n] [%l]: %v%$",
 	    .FileSinkLoggerPattern    = "[%T] [%l] [%n] [%l]: %v",
-	    .SystemLoggerName         = "SYSTEM",
-	    .AppLoggerName            = "APP",
+	    .EngineLoggerName         = "SYSTEM",
+	    .RuntimeLoggerName            = "APP",
 	};
 
         // Initialize the logger. Important! This must be called before any logging is done.
 	SW::LogSystem::Initialize(spec);
 
 	std::filesystem::path path = "C:/Users/username/Documents";
-	SYSTEM_TRACE("This is a trace message {} / {}", 12, path);
+	SW_ENGINE_TRACE("This is a trace message {} / {}", 12, path);
 
-	SYSTEM_TRACE("This is a trace message {} / {}", 12, "some text");
-	SYSTEM_INFO("This is an info message {} / {}", 12, "some text");
-	SYSTEM_DEBUG("This is a debug message {} / {}", 12, "some text");
-	SYSTEM_WARN("This is a warning message {} / {}", 12, "some text");
-	SYSTEM_ERROR("This is an error message {} / {}", 12, "some text");
-	SYSTEM_FATAL("This is a fatal message {} / {}", 12, "some text");
+	SW_ENGINE_TRACE("This is a trace message {} / {}", 12, "some text");
+	SW_ENGINE_INFO("This is an info message {} / {}", 12, "some text");
+	SW_ENGINE_DEBUG("This is a debug message {} / {}", 12, "some text");
+	SW_ENGINE_WARN("This is a warning message {} / {}", 12, "some text");
+	SW_ENGINE_ERROR("This is an error message {} / {}", 12, "some text");
+	SW_ENGINE_FATAL("This is a fatal message {} / {}", 12, "some text");
 
-	APP_TRACE("This is a trace message {} / {}", 12, "some text");
-	APP_INFO("This is an info message {} / {}", 12, "some text");
-	APP_DEBUG("This is a debug message {} / {}", 12, "some text");
-	APP_WARN("This is a warning message {} / {}", 12, "some text");
-	APP_ERROR("This is an error message {} / {}", 12, "some text");
-	APP_FATAL("This is a fatal message {} / {}", 12, "some text");
+	SW_RUNTIME_TRACE("This is a trace message {} / {}", 12, "some text");
+	SW_RUNTIME_INFO("This is an info message {} / {}", 12, "some text");
+	SW_RUNTIME_DEBUG("This is a debug message {} / {}", 12, "some text");
+	SW_RUNTIME_WARN("This is a warning message {} / {}", 12, "some text");
+	SW_RUNTIME_ERROR("This is an error message {} / {}", 12, "some text");
+	SW_RUNTIME_FATAL("This is a fatal message {} / {}", 12, "some text");
 
         ASSERT(false, "This is an assertion failure message {} / {}", 12, "some text");
 
