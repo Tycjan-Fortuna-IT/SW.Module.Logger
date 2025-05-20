@@ -1,15 +1,9 @@
-return function(basePath)
+return function(importPath)
     return {
-        Name = "SW Logger Module",
-        Defines = {
-            "SPDLOG_COMPILED_LIB"
-        },
-        LibsToLink = { "Logger", "spdlog" },
+        Name = "SW.Module.Logger",
+        LibsToLink = { "SW.Module.Logger" },
         IncludeDirs = {
-            basePath .. "/src",
-        },
-        ExternalIncludeDirs = {
-            basePath .. "/vendor/spdlog/include"
+            importPath .. "/src", importPath .. "/vendor/spdlog/include"
         },
     }
 end
